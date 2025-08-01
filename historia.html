@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regime Militar no Brasil: Linha do Tempo Interativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Merriweather:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #002776;
+            --secondary: #009c3b;
+            --accent: #ffdf00;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            scroll-behavior: smooth;
+            font-weight: 400;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Merriweather', serif;
+            font-weight: 700;
+        }
+        
+        .flag-colors {
+            background: linear-gradient(90deg, #009c3b 33%, #ffdf00 33%, #ffdf00 67%, #002776 67%);
+            height: 8px;
+            width: 100%;
+        }
+        
+        .hero-pattern {
+            background-color: var(--primary);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath fill-rule='evenodd' d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h2l-2 2V0zm0 4l4-4h2l-6 6V4zm0 4l8-8h2L40 10V8zm0 4L52 0h2L40 14v-2zm0 4L56 0h2L40 18v-2zm0 4L60 0h2L40 22v-2zm0 4L64 0h2L40 26v-2zm0 4L68 0h2L40 30v-2zm0 4L72 0h2L40 34v-2zm0 4L76 0h2L40 38v-2zm0 4L80 0v2L42 40h-2zm4 0L80 4v2L46 40h-2zm4 0L80 8v2L50 40h-2zm4 0l28-28v2L54 40h-2zm4 0l24-24v2L58 40h-2zm4 0l20-20v2L62 40h-2zm4 0l16-16v2L66 40h-2zm4 0l12-12v2L70 40h-2zm4 0l8-8v2l-6 6h-2zm4 0l4-4v2l-2 2h-2z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .timeline-container {
+            position: relative;
+            padding-bottom: 4rem;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            z-index: 1;
+            border-radius: 3px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 4rem;
+            z-index: 2;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            padding-right: 50%;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item:nth-child(even) {
+            padding-left: 50%;
+            padding-right: 2rem;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            border: 4px solid #fff;
+            z-index: 3;
+            box-shadow: 0 0 0 4px rgba(0, 39, 118, 0.3);
+        }
+        
+        .timeline-content {
+            position: relative;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background-color: #fff;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #fff;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content::after {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid #fff;
+        }
+        
+        .president-card {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .president-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .president-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-button {
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .tab-button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .tab-button.active::after {
+            width: 100%;
+        }
+        
+        .tab-button.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .fact-card {
+            border-left: 4px solid var(--accent);
+            background-color: rgba(255, 223, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .fact-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .glossary-term {
+            cursor: pointer;
+            border-bottom: 1px dashed var(--primary);
+            position: relative;
+        }
+        
+        .glossary-term:hover .glossary-definition {
+            display: block;
+        }
+        
+        .glossary-definition {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            width: 250px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .quiz-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .quiz-option:hover {
+            background-color: rgba(0, 39, 118, 0.1);
+        }
+        
+        .quiz-option.correct {
+            background-color: rgba(0, 156, 59, 0.2);
+            border-color: var(--secondary);
+        }
+        
+        .quiz-option.incorrect {
+            background-color: rgba(220, 38, 38, 0.2);
+            border-color: #dc2626;
+        }
+        
+        /* Melhorias na tipografia */
+        .timeline-content h3 {
+            font-weight: 900;
+            letter-spacing: -0.01em;
+        }
+        
+        .event-date {
+            font-weight: 500;
+            letter-spacing: 0.02em;
+        }
+        
+        p {
+            line-height: 1.6;
+        }
+        
+        .section-title {
+            letter-spacing: -0.02em;
+            font-weight: 900;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 2rem;
+            }
+            
+            .timeline-item:nth-child(odd),
+            .timeline-item:nth-child(even) {
+                padding-left: 4rem;
+                padding-right: 1rem;
+            }
+            
+            .timeline-dot {
+                left: 2rem;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content::after,
+            .timeline-item:nth-child(even) .timeline-content::after {
+                left: -10px;
+                right: auto;
+                border-left: none;
+                border-right: 10px solid #fff;
+            }
+        }
+        
+        /* Estilização para o mapa interativo */
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background-color: #f0f0f0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        .map-point {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        
+        .map-point:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: var(--accent);
+        }
+        
+        .map-tooltip {
+            position: absolute;
+            background-color: white;
+            padding: 0.75rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 3;
+            width: 200px;
+            display: none;
+        }
+        
+        .map-point:hover + .map-tooltip {
+            display: block;
+        }
+        
+        /* Estilização para o gráfico de linha do tempo */
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-bar {
+            position: absolute;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to top, var(--primary), var(--secondary));
+            border-radius: 4px 4px 0 0;
+            transition: height 1s ease;
+        }
+        
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            transform: translateX(-50%);
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="flag-colors"></div>
+    
+    <header class="hero-pattern text-white py-16 px-4 md:px-8">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Regime Militar no Brasil</h1>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-8">Uma análise completa dos 21 anos que marcaram a história brasileira (1964-1985)</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#timeline" class="bg-white text-primary px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">Linha do Tempo</a>
+                <a href="#presidentes" class="bg-accent text-primary px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">Presidentes</a>
+                <a href="#fatos" class="bg-secondary text-white px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">Fatos Importantes</a>
+                <a href="#quiz" class="bg-white bg-opacity-20 text-white px-6 py-3 rounded-full font-medium hover:bg-opacity-30 transition-all">Teste seus Conhecimentos</a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="bg-white sticky top-0 z-10 shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-3">
+                <div class="font-bold text-primary text-lg">Regime Militar</div>
+                <div class="flex space-x-4">
+                    <a href="#timeline" class="tab-button px-3 py-2 hover:text-primary">Linha do Tempo</a>
+                    <a href="#presidentes" class="tab-button px-3 py-2 hover:text-primary">Presidentes</a>
+                    <a href="#contexto" class="tab-button px-3 py-2 hover:text-primary">Contexto</a>
+                    <a href="#legado" class="tab-button px-3 py-2 hover:text-primary">Legado</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-12 px-4 md:px-8">
+        <section class="mb-16">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-3xl font-bold mb-4 text-primary section-title">Introdução ao Regime Militar</h2>
+                <p class="mb-4">
+                    O regime militar brasileiro foi um período da política brasileira em que militares conduziram o país de 1º de abril de 1964 até 15 de março de 1985. 
+                    Caracterizou-se pela falta de democracia, supressão de direitos constitucionais, censura, perseguição política e repressão aos que eram contra o regime.
+                </p>
+                <p>
+                    Durante esses 21 anos, o Brasil foi governado por generais do Exército, que se sucederam na presidência através de eleições indiretas. 
+                    Este material apresenta uma linha do tempo detalhada, informações sobre os presidentes do período e os principais acontecimentos que marcaram essa fase da história brasileira.
+                </p>
+                
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-primary">
+                        <h3 class="font-bold text-lg mb-2">21 anos</h3>
+                        <p>Duração do regime militar no Brasil, de 1964 a 1985</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg border-l-4 border-secondary">
+                        <h3 class="font-bold text-lg mb-2">5 generais</h3>
+                        <p>Presidiram o Brasil durante o período militar</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-accent">
+                        <h3 class="font-bold text-lg mb-2">17 Atos Institucionais</h3>
+                        <p>Decretos emitidos pelo regime que alteraram a Constituição</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center section-title">Linha do Tempo do Regime Militar</h2>
+            
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">31 de março de 1964</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Golpe Militar</h3>
+                        <p class="mb-3">Militares depõem o presidente João Goulart e assumem o poder no Brasil, iniciando o período da ditadura militar. O golpe foi apoiado por setores conservadores da sociedade brasileira e pelos Estados Unidos.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Contexto</h4>
+                            <p class="text-sm">O presidente João Goulart propunha as "Reformas de Base", que incluíam reforma agrária, tributária e educacional. Essas propostas foram vistas como "ameaça comunista" por setores conservadores, em pleno contexto da Guerra Fria.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">9 de abril de 1964</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Ato Institucional nº 1 (AI-1)</h3>
+                        <p class="mb-3">Primeiro de uma série de decretos emitidos pelo regime militar. O AI-1 deu ao governo poderes para cassar mandatos legislativos, suspender direitos políticos e demitir funcionários públicos.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Impacto</h4>
+                            <p class="text-sm">Com o AI-1, foram cassados os mandatos de 41 deputados federais e suspendidos os direitos políticos de centenas de pessoas, incluindo o ex-presidente João Goulart e o ex-governador de Pernambuco Miguel Arraes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">15 de abril de 1964</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Posse de Castelo Branco</h3>
+                        <p class="mb-3">O marechal Humberto de Alencar Castelo Branco assume a presidência do Brasil, tornando-se o primeiro presidente do regime militar. Seu governo durou até março de 1967.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Características do governo</h4>
+                            <p class="text-sm">Castelo Branco implementou o Programa de Ação Econômica do Governo (PAEG), que visava combater a inflação. Também criou o Banco Central e o Serviço Nacional de Informações (SNI).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">27 de outubro de 1965</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Ato Institucional nº 2 (AI-2)</h3>
+                        <p class="mb-3">Extinguiu os partidos políticos existentes e estabeleceu eleições indiretas para presidente. Também aumentou os poderes do presidente para intervir nos estados e municípios.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Sistema bipartidário</h4>
+                            <p class="text-sm">Com a extinção dos partidos, foram criados apenas dois: a Aliança Renovadora Nacional (ARENA), que apoiava o governo, e o Movimento Democrático Brasileiro (MDB), que representava a oposição consentida.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">15 de março de 1967</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Posse de Costa e Silva</h3>
+                        <p class="mb-3">O general Artur da Costa e Silva assume a presidência do Brasil, sucedendo Castelo Branco. Seu governo foi marcado pelo endurecimento do regime.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Características do governo</h4>
+                            <p class="text-sm">Durante seu governo, ocorreram grandes manifestações estudantis e operárias contra o regime, como a Passeata dos Cem Mil, no Rio de Janeiro. A repressão aumentou significativamente nesse período.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">13 de dezembro de 1968</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Ato Institucional nº 5 (AI-5)</h3>
+                        <p class="mb-3">Considerado o mais duro golpe na democracia, o AI-5 deu poderes extraordinários ao presidente, fechou o Congresso Nacional, suspendeu garantias constitucionais e institucionalizou a tortura como método de interrogatório.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Anos de Chumbo</h4>
+                            <p class="text-sm">O AI-5 marcou o início dos "anos de chumbo", período de maior repressão política da ditadura militar. Suspendeu o habeas corpus para crimes políticos e permitiu intervenções em estados e municípios sem limitações constitucionais.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">31 de agosto de 1969</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Junta Militar assume o poder</h3>
+                        <p class="mb-3">Após Costa e Silva sofrer um derrame, uma junta militar composta pelos ministros do Exército, Marinha e Aeronáutica assume o governo, impedindo a posse do vice-presidente civil Pedro Aleixo.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Composição da Junta</h4>
+                            <p class="text-sm">A Junta Militar foi formada pelo general Aurélio de Lyra Tavares (Exército), almirante Augusto Rademaker (Marinha) e brigadeiro Márcio de Souza e Melo (Aeronáutica). Governou o país por dois meses.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">30 de outubro de 1969</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Posse de Médici</h3>
+                        <p class="mb-3">O general Emílio Garrastazu Médici assume a presidência do Brasil. Seu governo é considerado o mais repressivo do período militar.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Características do governo</h4>
+                            <p class="text-sm">Durante o governo Médici, ocorreu o chamado "milagre econômico brasileiro", com altas taxas de crescimento do PIB. Ao mesmo tempo, foi o período de maior repressão política, com perseguição, tortura e assassinatos de opositores.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">1969-1974</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">"Anos de Chumbo" e "Milagre Econômico"</h3>
+                        <p class="mb-3">Período de maior repressão política, com perseguição, tortura e assassinatos de opositores. Simultaneamente, o Brasil viveu o chamado "milagre econômico", com altas taxas de crescimento do PIB.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Contradições</h4>
+                            <p class="text-sm">Enquanto a economia crescia a taxas superiores a 10% ao ano, a desigualdade social aumentava. O governo usava o slogan "Brasil: Ame-o ou Deixe-o" e investia em grandes obras, como a Transamazônica e a Ponte Rio-Niterói.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">15 de março de 1974</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Posse de Geisel e Início da Abertura Política</h3>
+                        <p class="mb-3">O general Ernesto Geisel assume a presidência e inicia o processo de abertura política "lenta, gradual e segura". Neste período, houve redução da censura e início do diálogo com a oposição.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Características do governo</h4>
+                            <p class="text-sm">Geisel enfrentou resistência da linha-dura militar à abertura política. Em 1976, demitiu o comandante do II Exército após a morte do jornalista Vladimir Herzog e do operário Manuel Fiel Filho nas dependências do DOI-CODI.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">13 de outubro de 1978</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Fim do AI-5</h3>
+                        <p class="mb-3">O Ato Institucional nº 5 é revogado, restaurando o habeas corpus para crimes políticos e outras garantias constitucionais.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Emenda Constitucional nº 11</h4>
+                            <p class="text-sm">A revogação do AI-5 foi parte da Emenda Constitucional nº 11, que entrou em vigor em 1º de janeiro de 1979. Representou um importante passo no processo de abertura política.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">15 de março de 1979</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Posse de Figueiredo</h3>
+                        <p class="mb-3">O general João Baptista Figueiredo assume a presidência do Brasil, sendo o último presidente do regime militar. Seu governo deu continuidade ao processo de abertura política.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Características do governo</h4>
+                            <p class="text-sm">Figueiredo ficou conhecido pela frase "prefiro cheiro de cavalo ao cheiro do povo" e por dizer que prenderia e arrebentaria quem fosse contra a abertura. Durante seu governo, foi aprovada a Lei da Anistia e o fim do bipartidarismo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">28 de agosto de 1979</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Lei da Anistia</h3>
+                        <p class="mb-3">Aprovação da Lei da Anistia, que permitiu o retorno dos exilados políticos ao Brasil e concedeu perdão aos crimes políticos cometidos durante o regime militar, tanto por opositores quanto por agentes do Estado.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Controvérsias</h4>
+                            <p class="text-sm">A Lei da Anistia é controversa até hoje, pois também anistiou os agentes do Estado que cometeram crimes de tortura e assassinato. Movimentos de direitos humanos questionam essa interpretação da lei.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">22 de novembro de 1979</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Fim do Bipartidarismo</h3>
+                        <p class="mb-3">Aprovação da Lei nº 6.767, que extinguiu o sistema bipartidário e permitiu a criação de novos partidos políticos.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Novos partidos</h4>
+                            <p class="text-sm">Com o fim do bipartidarismo, surgiram novos partidos como o PDS (sucessor da ARENA), PMDB (sucessor do MDB), PT, PDT e PTB, entre outros.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">30 de abril de 1981</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Atentado do Riocentro</h3>
+                        <p class="mb-3">Bomba explode no colo de um sargento dentro de um carro no estacionamento do Riocentro, no Rio de Janeiro, durante um show em comemoração ao Dia do Trabalho. O episódio é considerado uma tentativa de setores militares de interromper o processo de abertura política.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Investigação</h4>
+                            <p class="text-sm">A investigação oficial concluiu que as vítimas eram as próprias responsáveis pelo atentado, que teria sido um "acidente". Apenas em 1999 o caso foi reaberto, mas acabou arquivado por prescrição.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">1983-1984</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Movimento "Diretas Já"</h3>
+                        <p class="mb-3">Campanha popular que mobilizou milhões de brasileiros em favor das eleições diretas para presidente. Apesar da grande mobilização, a emenda constitucional que propunha eleições diretas não foi aprovada pelo Congresso.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Emenda Dante de Oliveira</h4>
+                            <p class="text-sm">A Emenda Dante de Oliveira, que propunha eleições diretas para presidente em 1985, foi votada em 25 de abril de 1984. Faltaram 22 votos para que fosse aprovada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">15 de janeiro de 1985</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Eleição de Tancredo Neves</h3>
+                        <p class="mb-3">Tancredo Neves é eleito presidente pelo Colégio Eleitoral, derrotando o candidato do regime militar, Paulo Maluf. Sua eleição marca o fim do regime militar, embora ainda através de eleições indiretas.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Aliança Democrática</h4>
+                            <p class="text-sm">Tancredo foi eleito pela Aliança Democrática, união entre o PMDB e a Frente Liberal (dissidentes do PDS). José Sarney, ex-presidente do PDS, foi seu vice.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">15 de março de 1985</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Fim da Ditadura Militar</h3>
+                        <p class="mb-3">Com a posse de José Sarney (vice de Tancredo Neves, que faleceu antes de assumir), encerra-se oficialmente o período da ditadura militar no Brasil, iniciando a Nova República e o processo de redemocratização.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Morte de Tancredo</h4>
+                            <p class="text-sm">Tancredo Neves foi internado na véspera de sua posse e faleceu em 21 de abril de 1985, sem assumir a presidência. José Sarney governou até 1990.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">5 de outubro de 1988</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Constituição Cidadã</h3>
+                        <p class="mb-3">Promulgação da Constituição de 1988, conhecida como "Constituição Cidadã", que consolidou a redemocratização do país e estabeleceu garantias fundamentais aos cidadãos brasileiros.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Assembleia Constituinte</h4>
+                            <p class="text-sm">A Assembleia Nacional Constituinte foi instalada em 1º de fevereiro de 1987 e trabalhou por 20 meses na elaboração da nova Constituição, que é considerada um marco na história democrática do Brasil.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-2 event-date">16 de maio de 2012</span>
+                        <h3 class="text-xl font-bold text-primary mb-2">Comissão Nacional da Verdade</h3>
+                        <p class="mb-3">Criação da Comissão Nacional da Verdade para investigar as violações de direitos humanos ocorridas durante o regime militar. O relatório final, publicado em 2014, documentou 434 mortes e desaparecimentos durante a ditadura.</p>
+                        <div class="bg-gray-100 p-3 rounded-md">
+                            <h4 class="font-semibold text-sm uppercase text-gray-600 mb-1">Relatório final</h4>
+                            <p class="text-sm">O relatório final da Comissão Nacional da Verdade foi entregue à presidente Dilma Rousseff em 10 de dezembro de 2014. Além de documentar crimes, fez 29 recomendações para que as violações não se repitam.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="presidentes" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center section-title">Presidentes do Regime Militar</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="president-card">
+                    <div class="president-header">
+                        <h3 class="text-xl font-bold">Humberto de Alencar Castelo Branco</h3>
+                        <p class="text-sm">15/04/1964 - 15/03/1967</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-center mb-4">
+                            <svg viewBox="0 0 100 100" width="120" height="120">
+                                <circle cx="50" cy="40" r="25" fill="#d1d5db"/>
+                                <rect x="25" y="65" width="50" height="30" fill="#1e3a8a"/>
+                                <circle cx="50" cy="40" r="20" fill="#f3f4f6"/>
+                                <path d="M50 30 Q60 30 60 45 Q60 60 50 60 Q40 60 40 45 Q40 30 50 30" fill="#d1d5db"/>
+                                <circle cx="43" cy="38" r="3" fill="#1f2937"/>
+                                <circle cx="57" cy="38" r="3" fill="#1f2937"/>
+                                <path d="M43 48 Q50 53 57 48" fill="none" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M30 40 L25 35 M70 40 L75 35" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M35 75 L35 95 M65 75 L65 95" stroke="#1e3a8a" stroke-width="8"/>
+                                <rect x="35" y="75" width="30" height="10" fill="#1e3a8a"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold mb-2">Principais características:</h4>
+                        <ul class="list-disc pl-5 mb-4 text-sm">
+                            <li>Primeiro presidente do regime militar</li>
+                            <li>Implementou o PAEG (Programa de Ação Econômica do Governo)</li>
+                            <li>Criou o Banco Central e o SNI (Serviço Nacional de Informações)</li>
+                            <li>Promulgou a Constituição de 1967</li>
+                            <li>Editou os Atos Institucionais nº 1, 2, 3 e 4</li>
+                        </ul>
+                        <h4 class="font-semibold mb-2">Legado:</h4>
+                        <p class="text-sm">Castelo Branco tentou implementar um governo de transição, com prazo determinado, mas acabou institucionalizando o regime militar. Sua política econômica conseguiu reduzir a inflação, mas à custa de recessão e desemprego.</p>
+                    </div>
+                </div>
+
+                <div class="president-card">
+                    <div class="president-header">
+                        <h3 class="text-xl font-bold">Artur da Costa e Silva</h3>
+                        <p class="text-sm">15/03/1967 - 31/08/1969</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-center mb-4">
+                            <svg viewBox="0 0 100 100" width="120" height="120">
+                                <circle cx="50" cy="40" r="25" fill="#d1d5db"/>
+                                <rect x="25" y="65" width="50" height="30" fill="#1e3a8a"/>
+                                <circle cx="50" cy="40" r="20" fill="#f3f4f6"/>
+                                <path d="M50 30 Q60 30 60 45 Q60 60 50 60 Q40 60 40 45 Q40 30 50 30" fill="#d1d5db"/>
+                                <circle cx="43" cy="38" r="3" fill="#1f2937"/>
+                                <circle cx="57" cy="38" r="3" fill="#1f2937"/>
+                                <path d="M43 48 Q50 45 57 48" fill="none" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M30 40 L25 35 M70 40 L75 35" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M35 75 L35 95 M65 75 L65 95" stroke="#1e3a8a" stroke-width="8"/>
+                                <rect x="35" y="75" width="30" height="10" fill="#1e3a8a"/>
+                                <rect x="40" y="30" width="20" height="5" fill="#1f2937"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold mb-2">Principais características:</h4>
+                        <ul class="list-disc pl-5 mb-4 text-sm">
+                            <li>Representante da "linha-dura" militar</li>
+                            <li>Enfrentou grandes manifestações estudantis e operárias</li>
+                            <li>Decretou o AI-5, o mais duro golpe na democracia brasileira</li>
+                            <li>Afastou-se do poder por motivos de saúde (sofreu um derrame)</li>
+                            <li>Durante seu governo ocorreu a Passeata dos Cem Mil</li>
+                        </ul>
+                        <h4 class="font-semibold mb-2">Legado:</h4>
+                        <p class="text-sm">Costa e Silva intensificou a repressão política e promulgou o AI-5, que suspendeu garantias constitucionais e deu poderes quase ilimitados ao presidente. Seu governo marcou o início dos "anos de chumbo" da ditadura.</p>
+                    </div>
+                </div>
+
+                <div class="president-card">
+                    <div class="president-header">
+                        <h3 class="text-xl font-bold">Emílio Garrastazu Médici</h3>
+                        <p class="text-sm">30/10/1969 - 15/03/1974</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-center mb-4">
+                            <svg viewBox="0 0 100 100" width="120" height="120">
+                                <circle cx="50" cy="40" r="25" fill="#d1d5db"/>
+                                <rect x="25" y="65" width="50" height="30" fill="#1e3a8a"/>
+                                <circle cx="50" cy="40" r="20" fill="#f3f4f6"/>
+                                <path d="M50 30 Q60 30 60 45 Q60 60 50 60 Q40 60 40 45 Q40 30 50 30" fill="#d1d5db"/>
+                                <circle cx="43" cy="38" r="3" fill="#1f2937"/>
+                                <circle cx="57" cy="38" r="3" fill="#1f2937"/>
+                                <path d="M43 48 Q50 45 57 48" fill="none" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M30 40 L25 35 M70 40 L75 35" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M35 75 L35 95 M65 75 L65 95" stroke="#1e3a8a" stroke-width="8"/>
+                                <rect x="35" y="75" width="30" height="10" fill="#1e3a8a"/>
+                                <path d="M35 35 Q50 25 65 35" fill="none" stroke="#1f2937" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold mb-2">Principais características:</h4>
+                        <ul class="list-disc pl-5 mb-4 text-sm">
+                            <li>Governo mais repressivo do regime militar</li>
+                            <li>Período do "milagre econômico brasileiro"</li>
+                            <li>Intensificação da censura e da propaganda oficial</li>
+                            <li>Construção de grandes obras, como a Transamazônica</li>
+                            <li>Slogan "Brasil: Ame-o ou Deixe-o"</li>
+                        </ul>
+                        <h4 class="font-semibold mb-2">Legado:</h4>
+                        <p class="text-sm">O governo Médici ficou marcado pela combinação de crescimento econômico acelerado e forte repressão política. Foi o período de maior número de denúncias de tortura, desaparecimentos e assassinatos de opositores.</p>
+                    </div>
+                </div>
+
+                <div class="president-card">
+                    <div class="president-header">
+                        <h3 class="text-xl font-bold">Ernesto Geisel</h3>
+                        <p class="text-sm">15/03/1974 - 15/03/1979</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-center mb-4">
+                            <svg viewBox="0 0 100 100" width="120" height="120">
+                                <circle cx="50" cy="40" r="25" fill="#d1d5db"/>
+                                <rect x="25" y="65" width="50" height="30" fill="#1e3a8a"/>
+                                <circle cx="50" cy="40" r="20" fill="#f3f4f6"/>
+                                <path d="M50 30 Q60 30 60 45 Q60 60 50 60 Q40 60 40 45 Q40 30 50 30" fill="#d1d5db"/>
+                                <circle cx="43" cy="38" r="3" fill="#1f2937"/>
+                                <circle cx="57" cy="38" r="3" fill="#1f2937"/>
+                                <path d="M43 48 Q50 50 57 48" fill="none" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M30 40 L25 35 M70 40 L75 35" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M35 75 L35 95 M65 75 L65 95" stroke="#1e3a8a" stroke-width="8"/>
+                                <rect x="35" y="75" width="30" height="10" fill="#1e3a8a"/>
+                                <path d="M40 30 L60 30" stroke="#1f2937" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold mb-2">Principais características:</h4>
+                        <ul class="list-disc pl-5 mb-4 text-sm">
+                            <li>Iniciou o processo de abertura política "lenta, gradual e segura"</li>
+                            <li>Enfrentou resistência da linha-dura militar</li>
+                            <li>Demitiu o comandante do II Exército após a morte de Vladimir Herzog</li>
+                            <li>Revogou o AI-5 em 1978</li>
+                            <li>Implementou o II Plano Nacional de Desenvolvimento</li>
+                        </ul>
+                        <h4 class="font-semibold mb-2">Legado:</h4>
+                        <p class="text-sm">Geisel iniciou o processo de abertura política, mas manteve o controle sobre o ritmo das mudanças. Seu governo foi marcado pela crise do petróleo e pelo fim do "milagre econômico", com aumento da inflação e da dívida externa.</p>
+                    </div>
+                </div>
+
+                <div class="president-card">
+                    <div class="president-header">
+                        <h3 class="text-xl font-bold">João Baptista Figueiredo</h3>
+                        <p class="text-sm">15/03/1979 - 15/03/1985</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-center mb-4">
+                            <svg viewBox="0 0 100 100" width="120" height="120">
+                                <circle cx="50" cy="40" r="25" fill="#d1d5db"/>
+                                <rect x="25" y="65" width="50" height="30" fill="#1e3a8a"/>
+                                <circle cx="50" cy="40" r="20" fill="#f3f4f6"/>
+                                <path d="M50 30 Q60 30 60 45 Q60 60 50 60 Q40 60 40 45 Q40 30 50 30" fill="#d1d5db"/>
+                                <circle cx="43" cy="38" r="3" fill="#1f2937"/>
+                                <circle cx="57" cy="38" r="3" fill="#1f2937"/>
+                                <path d="M43 48 Q50 52 57 48" fill="none" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M30 40 L25 35 M70 40 L75 35" stroke="#1f2937" stroke-width="1.5"/>
+                                <path d="M35 75 L35 95 M65 75 L65 95" stroke="#1e3a8a" stroke-width="8"/>
+                                <rect x="35" y="75" width="30" height="10" fill="#1e3a8a"/>
+                                <path d="M35 25 L65 25" stroke="#1f2937" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold mb-2">Principais características:</h4>
+                        <ul class="list-disc pl-5 mb-4 text-sm">
+                            <li>Último presidente do regime militar</li>
+                            <li>Deu continuidade ao processo de abertura política</li>
+                            <li>Aprovou a Lei da Anistia em 1979</li>
+                            <li>Restabeleceu o pluripartidarismo</li>
+                            <li>Enfrentou grave crise econômica e o movimento "Diretas Já"</li>
+                        </ul>
+                        <h4 class="font-semibold mb-2">Legado:</h4>
+                        <p class="text-sm">Figueiredo concluiu o processo de abertura política, mas enfrentou uma grave crise econômica, com inflação alta e recessão. Seu governo foi marcado pela campanha das "Diretas Já" e pela transição para o governo civil.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contexto" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center section-title">Contexto Histórico</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-primary">Contexto Internacional</h3>
+                <p class="mb-4">
+                    O regime militar brasileiro ocorreu durante a Guerra Fria, período de disputa ideológica entre Estados Unidos (capitalismo) e União Soviética (socialismo). 
+                    Os EUA apoiaram golpes militares na América Latina para impedir a expansão do comunismo na região.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="fact-card p-4">
+                        <h4 class="font-semibold mb-2">Guerra Fria</h4>
+                        <p class="text-sm">A polarização mundial entre EUA e URSS influenciou diretamente a política brasileira. O temor do "perigo comunista" foi usado como justificativa para o golpe de 1964.</p>
+                    </div>
+                    <div class="fact-card p-4">
+                        <h4 class="font-semibold mb-2">Operação Condor</h4>
+                        <p class="text-sm">Aliança entre as ditaduras sul-americanas (Brasil, Argentina, Chile, Uruguai, Paraguai e Bolívia) para perseguir opositores políticos além das fronteiras nacionais.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-primary">Contexto Nacional</h3>
+                <p class="mb-4">
+                    Antes do golpe, o Brasil vivia um período de instabilidade política. O presidente João Goulart propunha as "Reformas de Base", 
+                    que incluíam reforma agrária, tributária e educacional. Essas propostas foram vistas como "ameaça comunista" por setores conservadores.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="fact-card p-4">
+                        <h4 class="font-semibold mb-2">Renúncia de Jânio Quadros</h4>
+                        <p class="text-sm">Em 1961, o presidente Jânio Quadros renunciou após sete meses de governo, gerando uma crise política. João Goulart, seu vice, assumiu a presidência em meio a forte oposição militar.</p>
+                    </div>
+                    <div class="fact-card p-4">
+                        <h4 class="font-semibold mb-2">Reformas de Base</h4>
+                        <p class="text-sm">Conjunto de reformas estruturais propostas por João Goulart, incluindo reforma agrária, bancária, fiscal, urbana, administrativa e universitária, além da extensão do voto aos analfabetos e militares de baixa patente.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-primary">Apoio Civil ao Regime</h3>
+                <p class="mb-4">
+                    O golpe militar contou com apoio de setores da sociedade civil, como empresários, parte da imprensa, Igreja Católica e classe média urbana. 
+                    A "Marcha da Família com Deus pela Liberdade", realizada em março de 1964, reuniu milhares de pessoas contra o governo Goulart.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="fact-card p-4">
+                        <h4 class="font-semibold mb-2">IPES e IBAD</h4>
+                        <p class="text-sm">Instituto de Pesquisas e Estudos Sociais (IPES) e Instituto Brasileiro de Ação Democrática (IBAD) foram organizações financiadas por empresários brasileiros e estrangeiros que atuaram na desestabilização do governo Goulart.</p>
+                    </div>
+                    <div class="fact-card p-4">
+                        <h4 class="font-semibold mb-2">Apoio dos EUA</h4>
+                        <p class="text-sm">Os Estados Unidos apoiaram o golpe militar através da "Operação Brother Sam", que previa o envio de navios de guerra, combustível e armamentos para apoiar os militares brasileiros caso houvesse resistência ao golpe.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fatos" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center section-title">Fatos Importantes do Regime Militar</h2>
+            
+            <div class="mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-primary">Atos Institucionais</h3>
+                    <p class="mb-6">
+                        Os Atos Institucionais foram decretos emitidos pelos governos militares que se sobrepunham à Constituição. 
+                        Ao todo, foram editados 17 Atos Institucionais entre 1964 e 1969, que deram sustentação jurídica ao regime.
+                    </p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left">Ato</th>
+                                    <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left">Data</th>
+                                    <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left">Principais medidas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200 font-medium">AI-1</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">09/04/1964</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Cassação de mandatos e suspensão de direitos políticos</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200 font-medium">AI-2</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">27/10/1965</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Extinção dos partidos políticos e eleições indiretas para presidente</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200 font-medium">AI-3</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">05/02/1966</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Eleições indiretas para governadores e nomeação de prefeitos das capitais</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200 font-medium">AI-4</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">07/12/1966</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Convocação do Congresso para votar a Constituição de 1967</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200 font-medium">AI-5</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">13/12/1968</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Fechamento do Congresso, suspensão do habeas corpus e institucionalização da repressão</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-primary">Repressão e Resistência</h3>
+                    <p class="mb-6">
+                        Durante o regime militar, diversos órgãos de repressão foram criados ou fortalecidos para combater a oposição. 
+                        Ao mesmo tempo, surgiram movimentos de resistência que lutavam contra a ditadura.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-bold text-lg mb-3">Órgãos de Repressão</h4>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li><span class="font-medium">SNI</span> - Serviço Nacional de Informações</li>
+                                <li><span class="font-medium">DOI-CODI</span> - Destacamento de Operações de Informação - Centro de Operações de Defesa Interna</li>
+                                <li><span class="font-medium">DOPS</span> - Departamento de Ordem Política e Social</li>
+                                <li><span class="font-medium">OBAN</span> - Operação Bandeirante</li>
+                                <li><span class="font-medium">CENIMAR</span> - Centro de Informações da Marinha</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-3">Movimentos de Resistência</h4>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li><span class="font-medium">ALN</span> - Ação Libertadora Nacional (liderada por Carlos Marighella)</li>
+                                <li><span class="font-medium">MR-8</span> - Movimento Revolucionário 8 de Outubro</li>
+                                <li><span class="font-medium">VPR</span> - Vanguarda Popular Revolucionária</li>
+                                <li><span class="font-medium">PCB</span> - Partido Comunista Brasileiro</li>
+                                <li><span class="font-medium">UNE</span> - União Nacional dos Estudantes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-primary">Economia durante o Regime Militar</h3>
+                    <p class="mb-6">
+                        A economia brasileira durante o regime militar passou por diferentes fases, incluindo o chamado "milagre econômico" (1969-1973), 
+                        quando o PIB cresceu a taxas superiores a 10% ao ano, e a crise econômica dos anos 1980.
+                    </p>
+                    
+                    <div class="chart-container" id="economic-chart">
+                        <!-- O gráfico será gerado via JavaScript -->
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div class="fact-card p-4">
+                            <h4 class="font-semibold mb-2">Milagre Econômico (1969-1973)</h4>
+                            <p class="text-sm">Período de alto crescimento econômico, com média de 11% ao ano. Foi baseado em empréstimos externos, investimentos em infraestrutura e incentivos à indústria. Porém, aumentou a concentração de renda e a dívida externa.</p>
+                        </div>
+                        <div class="fact-card p-4">
+                            <h4 class="font-semibold mb-2">Crise dos anos 1980</h4>
+                            <p class="text-sm">A crise do petróleo e o aumento das taxas de juros internacionais levaram o Brasil a uma grave crise econômica, com inflação alta, recessão e aumento da dívida externa. Foi chamada de "década perdida".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-bold mb-4 text-primary">Cultura e Censura</h3>
+                    <p class="mb-6">
+                        Durante o regime militar, a cultura brasileira foi marcada pela censura e pela resistência. 
+                        Músicos, cineastas, escritores e artistas em geral encontraram formas de driblar a censura e criticar o regime.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="fact-card p-4">
+                            <h4 class="font-semibold mb-2">Música de Protesto</h4>
+                            <p class="text-sm">Artistas como Chico Buarque, Caetano Veloso, Gilberto Gil e Geraldo Vandré criaram músicas com letras metafóricas para driblar a censura. "Pra não dizer que não falei das flores" e "Apesar de você" são exemplos famosos.</p>
+                        </div>
+                        <div class="fact-card p-4">
+                            <h4 class="font-semibold mb-2">Cinema Novo</h4>
+                            <p class="text-sm">Movimento cinematográfico que buscava retratar a realidade brasileira. Diretores como Glauber Rocha e Nelson Pereira dos Santos produziram filmes que, mesmo censurados, tornaram-se marcos do cinema nacional.</p>
+                        </div>
+                        <div class="fact-card p-4">
+                            <h4 class="font-semibold mb-2">Imprensa Alternativa</h4>
+                            <p class="text-sm">Jornais como "O Pasquim", "Opinião" e "Movimento" surgiram como alternativa à grande imprensa e publicavam críticas ao regime, frequentemente sofrendo censura e perseguição.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="legado" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center section-title">Legado e Reflexões</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-primary">Impactos na Sociedade Brasileira</h3>
+                <p class="mb-4">
+                    O regime militar deixou marcas profundas na sociedade brasileira. Por um lado, houve desenvolvimento econômico e grandes obras de infraestrutura. 
+                    Por outro, graves violações de direitos humanos, censura e repressão política.
+                </p>
+                <p>
+                    A compreensão desse período histórico é fundamental para fortalecer a democracia brasileira e evitar que erros do passado se repitam. 
+                    O debate sobre a ditadura militar continua presente na sociedade brasileira, com diferentes interpretações sobre seus impactos e legados.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-primary">
+                        <h4 class="font-semibold mb-2">Legado Positivo</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>Desenvolvimento da infraestrutura nacional</li>
+                            <li>Modernização da economia e da indústria</li>
+                            <li>Expansão do ensino superior</li>
+                            <li>Integração nacional através de rodovias</li>
+                            <li>Desenvolvimento tecnológico em algumas áreas</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-red-500">
+                        <h4 class="font-semibold mb-2">Legado Negativo</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>Violações de direitos humanos</li>
+                            <li>Aumento da desigualdade social</li>
+                            <li>Elevada dívida externa</li>
+                            <li>Cultura política autoritária</li>
+                            <li>Trauma social e histórico</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-2xl font-bold mb-4 text-primary">Justiça de Transição</h3>
+                <p class="mb-6">
+                    A justiça de transição refere-se ao conjunto de medidas adotadas para lidar com o legado de violações de direitos humanos após o fim de regimes autoritários. 
+                    No Brasil, esse processo tem sido lento e controverso.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-lg mb-3">Medidas Adotadas</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-sm">
+                            <li><span class="font-medium">Lei da Anistia (1979)</span> - Permitiu o retorno dos exilados políticos, mas também anistiou os agentes do Estado que cometeram crimes durante o regime</li>
+                            <li><span class="font-medium">Comissão de Mortos e Desaparecidos Políticos (1995)</span> - Reconheceu a responsabilidade do Estado por mortes e desaparecimentos</li>
+                            <li><span class="font-medium">Comissão de Anistia (2002)</span> - Concedeu reparações a perseguidos políticos</li>
+                            <li><span class="font-medium">Comissão Nacional da Verdade (2012-2014)</span> - Investigou as violações de direitos humanos ocorridas durante o regime militar</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-3">Desafios Pendentes</h4>
+                        <ul class="list-disc pl-5 space-y-2 text-sm">
+                            <li>Responsabilização judicial dos agentes que cometeram crimes durante o regime</li>
+                            <li>Abertura completa dos arquivos da ditadura</li>
+                            <li>Reformas institucionais nas forças de segurança</li>
+                            <li>Educação e memória sobre o período</li>
+                            <li>Localização dos restos mortais de desaparecidos políticos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center section-title">Teste seus Conhecimentos</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div id="quiz-container">
+                    <div class="quiz-question mb-8">
+                        <h3 class="text-xl font-bold mb-4">1. Em que data ocorreu o golpe militar que depôs o presidente João Goulart?</h3>
+                        <div class="space-y-3">
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q1" class="mr-2">
+                                    <span>1º de abril de 1965</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q1" class="mr-2">
+                                    <span>31 de março de 1964</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q1" class="mr-2">
+                                    <span>13 de dezembro de 1968</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q1" class="mr-2">
+                                    <span>15 de março de 1967</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-question mb-8">
+                        <h3 class="text-xl font-bold mb-4">2. Qual foi o Ato Institucional considerado o mais duro golpe na democracia brasileira?</h3>
+                        <div class="space-y-3">
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q2" class="mr-2">
+                                    <span>AI-1</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q2" class="mr-2">
+                                    <span>AI-2</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q2" class="mr-2">
+                                    <span>AI-5</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q2" class="mr-2">
+                                    <span>AI-4</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-question mb-8">
+                        <h3 class="text-xl font-bold mb-4">3. Qual presidente militar iniciou o processo de abertura política "lenta, gradual e segura"?</h3>
+                        <div class="space-y-3">
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q3" class="mr-2">
+                                    <span>Emílio Garrastazu Médici</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q3" class="mr-2">
+                                    <span>Ernesto Geisel</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q3" class="mr-2">
+                                    <span>João Baptista Figueiredo</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q3" class="mr-2">
+                                    <span>Humberto de Alencar Castelo Branco</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-question mb-8">
+                        <h3 class="text-xl font-bold mb-4">4. Qual movimento popular mobilizou milhões de brasileiros em favor das eleições diretas para presidente em 1983-1984?</h3>
+                        <div class="space-y-3">
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q4" class="mr-2">
+                                    <span>Diretas Já</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q4" class="mr-2">
+                                    <span>Passeata dos Cem Mil</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q4" class="mr-2">
+                                    <span>Movimento pela Anistia</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q4" class="mr-2">
+                                    <span>Movimento Estudantil</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-question">
+                        <h3 class="text-xl font-bold mb-4">5. Qual foi o último presidente do regime militar brasileiro?</h3>
+                        <div class="space-y-3">
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q5" class="mr-2">
+                                    <span>Ernesto Geisel</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q5" class="mr-2">
+                                    <span>João Baptista Figueiredo</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q5" class="mr-2">
+                                    <span>José Sarney</span>
+                                </label>
+                            </div>
+                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
+                                <label class="flex items-center">
+                                    <input type="radio" name="q5" class="mr-2">
+                                    <span>Tancredo Neves</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 text-center">
+                        <button id="check-answers" class="bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">Verificar Respostas</button>
+                    </div>
+                    
+                    <div id="quiz-result" class="mt-8 p-4 rounded-lg text-center hidden">
+                        <h3 class="text-xl font-bold mb-2">Resultado</h3>
+                        <p id="quiz-score" class="text-lg"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center section-title">Glossário</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 text-primary">Termos Políticos</h3>
+                        <ul class="space-y-4">
+                            <li>
+                                <span class="font-bold">Ato Institucional:</span> 
+                                <p class="text-sm mt-1">Decreto emitido pelo governo militar que se sobrepunha à Constituição, dando poderes extraordinários ao Executivo.</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">Bipartidarismo:</span> 
+                                <p class="text-sm mt-1">Sistema político imposto pelo regime militar em que apenas dois partidos eram permitidos: ARENA (situação) e MDB (oposição).</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">DOI-CODI:</span> 
+                                <p class="text-sm mt-1">Destacamento de Operações de Informação - Centro de Operações de Defesa Interna. Principal órgão de repressão política durante o regime militar.</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">Linha-dura:</span> 
+                                <p class="text-sm mt-1">Grupo de militares que defendia maior rigor na repressão política e prolongamento do regime militar.</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">SNI:</span> 
+                                <p class="text-sm mt-1">Serviço Nacional de Informações. Órgão de inteligência criado em 1964 para monitorar atividades consideradas subversivas.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4 text-primary">Termos Econômicos e Sociais</h3>
+                        <ul class="space-y-4">
+                            <li>
+                                <span class="font-bold">Milagre Econômico:</span> 
+                                <p class="text-sm mt-1">Período entre 1969 e 1973 em que o Brasil teve altas taxas de crescimento econômico, superior a 10% ao ano.</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">PAEG:</span> 
+                                <p class="text-sm mt-1">Programa de Ação Econômica do Governo. Plano econômico implementado no governo Castelo Branco para combater a inflação.</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">PND:</span> 
+                                <p class="text-sm mt-1">Plano Nacional de Desenvolvimento. Conjunto de metas e investimentos para o desenvolvimento econômico do país.</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">Censura:</span> 
+                                <p class="text-sm mt-1">Controle e proibição de conteúdos considerados subversivos ou contrários ao regime em jornais, revistas, livros, músicas, filmes e peças teatrais.</p>
+                            </li>
+                            <li>
+                                <span class="font-bold">Anistia:</span> 
+                                <p class="text-sm mt-1">Perdão concedido pelo Estado a pessoas condenadas ou acusadas de crimes políticos. A Lei da Anistia de 1979 permitiu o retorno dos exilados políticos ao Brasil.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center section-title">Materiais para Estudo</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="border p-4 rounded-lg hover:shadow-md transition-all">
+                        <h3 class="text-lg font-bold mb-2">Livros Recomendados</h3>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>"Brasil: Nunca Mais" - Dom Paulo Evaristo Arns</li>
+                            <li>"A Ditadura Envergonhada" - Elio Gaspari</li>
+                            <li>"1964: O Golpe que Derrubou um Presidente" - Jorge Ferreira</li>
+                            <li>"Ditadura Militar Esquematizada" - Pedro Lenza</li>
+                            <li>"O Que Resta da Ditadura" - Edson Teles e Vladimir Safatle</li>
+                        </ul>
+                    </div>
+                    <div class="border p-4 rounded-lg hover:shadow-md transition-all">
+                        <h3 class="text-lg font-bold mb-2">Documentários</h3>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>"O Dia que Durou 21 Anos" (2012)</li>
+                            <li>"Cidadão Boilesen" (2009)</li>
+                            <li>"Cabra Marcado para Morrer" (1984)</li>
+                            <li>"Marighella" (2012)</li>
+                            <li>"Em Busca da Verdade" (2015)</li>
+                        </ul>
+                    </div>
+                    <div class="border p-4 rounded-lg hover:shadow-md transition-all">
+                        <h3 class="text-lg font-bold mb-2">Sites e Arquivos</h3>
+                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                            <li>Memórias da Ditadura (memoriasdaditadura.org.br)</li>
+                            <li>Arquivo Nacional (arquivonacional.gov.br)</li>
+                            <li>Comissão Nacional da Verdade (cnv.gov.br)</li>
+                            <li>Memorial da Resistência de São Paulo</li>
+                            <li>Centro de Documentação Eremias Delizoicov</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-primary text-white py-8 px-4">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Regime Militar no Brasil</h3>
+                    <p>Uma linha do tempo histórica (1964-1985)</p>
+                </div>
+                <div class="text-center md:text-right">
+                    <p class="text-sm">Este site foi criado com fins educacionais.</p>
+                    <p class="text-sm mt-2">© 2023 - Todos os direitos reservados</p>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-white border-opacity-20 text-sm text-center">
+                <p>Este material foi desenvolvido para auxiliar estudantes e professores no estudo do Regime Militar Brasileiro.</p>
+                <p class="mt-2">Fontes: Livros didáticos, documentos históricos e pesquisas acadêmicas sobre o período.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animação para os itens da timeline
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            function checkScroll() {
+                timelineItems.forEach(item => {
+                    const itemTop = item.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (itemTop < windowHeight * 0.85) {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                    }
+                });
+            }
+            
+            // Verifica a posição inicial
+            checkScroll();
+            
+            // Adiciona o evento de scroll
+            window.addEventListener('scroll', checkScroll);
+            
+            // Navegação por tabs
+            const tabButtons = document.querySelectorAll('.tab-button');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Atualiza a navegação ao rolar
+            window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY;
+                
+                document.querySelectorAll('section').forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                        const id = section.getAttribute('id');
+                        if (id) {
+                            document.querySelectorAll('.tab-button').forEach(button => {
+                                button.classList.remove('active');
+                                if (button.getAttribute('href') === '#' + id) {
+                                    button.classList.add('active');
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Quiz
+            const checkAnswersButton = document.getElementById('check-answers');
+            const quizResult = document.getElementById('quiz-result');
+            const quizScore = document.getElementById('quiz-score');
+            
+            checkAnswersButton.addEventListener('click', function() {
+                let score = 0;
+                const questions = document.querySelectorAll('.quiz-question');
+                
+                questions.forEach((question, index) => {
+                    const options = question.querySelectorAll('.quiz-option');
+                    let answered = false;
+                    
+                    options.forEach(option => {
+                        const radio = option.querySelector('input[type="radio"]');
+                        const isCorrect = option.getAttribute('data-correct') === 'true';
+                        
+                        if (radio.checked) {
+                            answered = true;
+                            if (isCorrect) {
+                                score++;
+                                option.classList.add('correct');
+                            } else {
+                                option.classList.add('incorrect');
+                            }
+                        } else if (isCorrect) {
+                            option.classList.add('correct');
+                        }
+                        
+                        // Desabilita os inputs após verificação
+                        radio.disabled = true;
+                    });
+                });
+                
+                quizScore.textContent = `Você acertou ${score} de 5 questões!`;
+                quizResult.classList.remove('hidden');
+                
+                // Desabilita o botão após verificação
+                this.disabled = true;
+            });
+            
+            // Gráfico de crescimento econômico
+            const chartContainer = document.getElementById('economic-chart');
+            const data = [
+                { year: '1964-1967', growth: 4.2, label: 'Castelo Branco' },
+                { year: '1967-1969', growth: 7.0, label: 'Costa e Silva' },
+                { year: '1969-1974', growth: 11.1, label: 'Médici' },
+                { year: '1974-1979', growth: 6.5, label: 'Geisel' },
+                { year: '1979-1985', growth: 1.6, label: 'Figueiredo' }
+            ];
+            
+            // Cria as barras do gráfico
+            const maxGrowth = Math.max(...data.map(item => item.growth));
+            const chartHeight = 250;
+            
+            data.forEach((item, index) => {
+                const barHeight = (item.growth / maxGrowth) * chartHeight;
+                const barWidth = 40;
+                const spacing = 20;
+                const totalWidth = (barWidth + spacing) * data.length;
+                const startX = (chartContainer.offsetWidth - totalWidth) / 2;
+                const barX = startX + index * (barWidth + spacing);
+                
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = '0';
+                bar.style.left = `${barX}px`;
+                bar.style.width = `${barWidth}px`;
+                
+                const label = document.createElement('div');
+                label.className = 'chart-label';
+                label.textContent = item.label;
+                label.style.left = `${barX + barWidth/2}px`;
+                
+                const value = document.createElement('div');
+                value.className = 'chart-value';
+                value.textContent = `${item.growth}%`;
+                value.style.left = `${barX + barWidth/2}px`;
+                
+                chartContainer.appendChild(bar);
+                chartContainer.appendChild(label);
+                chartContainer.appendChild(value);
+                
+                // Anima a altura da barra
+                setTimeout(() => {
+                    bar.style.height = `${barHeight}px`;
+                }, 100 * index);
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968843bc236c2d34',t:'MTc1NDA4MjAyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
