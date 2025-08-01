@@ -220,25 +220,6 @@
             z-index: 10;
         }
         
-        .quiz-option {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .quiz-option:hover {
-            background-color: rgba(0, 39, 118, 0.1);
-        }
-        
-        .quiz-option.correct {
-            background-color: rgba(0, 156, 59, 0.2);
-            border-color: var(--secondary);
-        }
-        
-        .quiz-option.incorrect {
-            background-color: rgba(220, 38, 38, 0.2);
-            border-color: #dc2626;
-        }
-        
         /* Melhorias na tipografia */
         .timeline-content h3 {
             font-weight: 900;
@@ -372,7 +353,6 @@
                 <a href="#timeline" class="bg-white text-primary px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">Linha do Tempo</a>
                 <a href="#presidentes" class="bg-accent text-primary px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">Presidentes</a>
                 <a href="#fatos" class="bg-secondary text-white px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">Fatos Importantes</a>
-                <a href="#quiz" class="bg-white bg-opacity-20 text-white px-6 py-3 rounded-full font-medium hover:bg-opacity-30 transition-all">Teste seus Conhecimentos</a>
             </div>
         </div>
     </header>
@@ -1127,173 +1107,6 @@
             </div>
         </section>
 
-        <section id="quiz" class="mb-16">
-            <h2 class="text-3xl font-bold mb-8 text-center section-title">Teste seus Conhecimentos</h2>
-            
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div id="quiz-container">
-                    <div class="quiz-question mb-8">
-                        <h3 class="text-xl font-bold mb-4">1. Em que data ocorreu o golpe militar que depôs o presidente João Goulart?</h3>
-                        <div class="space-y-3">
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q1" class="mr-2">
-                                    <span>1º de abril de 1965</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q1" class="mr-2">
-                                    <span>31 de março de 1964</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q1" class="mr-2">
-                                    <span>13 de dezembro de 1968</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q1" class="mr-2">
-                                    <span>15 de março de 1967</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="quiz-question mb-8">
-                        <h3 class="text-xl font-bold mb-4">2. Qual foi o Ato Institucional considerado o mais duro golpe na democracia brasileira?</h3>
-                        <div class="space-y-3">
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q2" class="mr-2">
-                                    <span>AI-1</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q2" class="mr-2">
-                                    <span>AI-2</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q2" class="mr-2">
-                                    <span>AI-5</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q2" class="mr-2">
-                                    <span>AI-4</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="quiz-question mb-8">
-                        <h3 class="text-xl font-bold mb-4">3. Qual presidente militar iniciou o processo de abertura política "lenta, gradual e segura"?</h3>
-                        <div class="space-y-3">
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q3" class="mr-2">
-                                    <span>Emílio Garrastazu Médici</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q3" class="mr-2">
-                                    <span>Ernesto Geisel</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q3" class="mr-2">
-                                    <span>João Baptista Figueiredo</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q3" class="mr-2">
-                                    <span>Humberto de Alencar Castelo Branco</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="quiz-question mb-8">
-                        <h3 class="text-xl font-bold mb-4">4. Qual movimento popular mobilizou milhões de brasileiros em favor das eleições diretas para presidente em 1983-1984?</h3>
-                        <div class="space-y-3">
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q4" class="mr-2">
-                                    <span>Diretas Já</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q4" class="mr-2">
-                                    <span>Passeata dos Cem Mil</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q4" class="mr-2">
-                                    <span>Movimento pela Anistia</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q4" class="mr-2">
-                                    <span>Movimento Estudantil</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="quiz-question">
-                        <h3 class="text-xl font-bold mb-4">5. Qual foi o último presidente do regime militar brasileiro?</h3>
-                        <div class="space-y-3">
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q5" class="mr-2">
-                                    <span>Ernesto Geisel</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="true">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q5" class="mr-2">
-                                    <span>João Baptista Figueiredo</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q5" class="mr-2">
-                                    <span>José Sarney</span>
-                                </label>
-                            </div>
-                            <div class="quiz-option border p-3 rounded-lg" data-correct="false">
-                                <label class="flex items-center">
-                                    <input type="radio" name="q5" class="mr-2">
-                                    <span>Tancredo Neves</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-8 text-center">
-                        <button id="check-answers" class="bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all">Verificar Respostas</button>
-                    </div>
-                    
-                    <div id="quiz-result" class="mt-8 p-4 rounded-lg text-center hidden">
-                        <h3 class="text-xl font-bold mb-2">Resultado</h3>
-                        <p id="quiz-score" class="text-lg"></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section class="mb-16">
             <h2 class="text-3xl font-bold mb-8 text-center section-title">Glossário</h2>
             
@@ -1347,45 +1160,6 @@
                                 <span class="font-bold">Anistia:</span> 
                                 <p class="text-sm mt-1">Perdão concedido pelo Estado a pessoas condenadas ou acusadas de crimes políticos. A Lei da Anistia de 1979 permitiu o retorno dos exilados políticos ao Brasil.</p>
                             </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-16">
-            <h2 class="text-3xl font-bold mb-8 text-center section-title">Materiais para Estudo</h2>
-            
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="border p-4 rounded-lg hover:shadow-md transition-all">
-                        <h3 class="text-lg font-bold mb-2">Livros Recomendados</h3>
-                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                            <li>"Brasil: Nunca Mais" - Dom Paulo Evaristo Arns</li>
-                            <li>"A Ditadura Envergonhada" - Elio Gaspari</li>
-                            <li>"1964: O Golpe que Derrubou um Presidente" - Jorge Ferreira</li>
-                            <li>"Ditadura Militar Esquematizada" - Pedro Lenza</li>
-                            <li>"O Que Resta da Ditadura" - Edson Teles e Vladimir Safatle</li>
-                        </ul>
-                    </div>
-                    <div class="border p-4 rounded-lg hover:shadow-md transition-all">
-                        <h3 class="text-lg font-bold mb-2">Documentários</h3>
-                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                            <li>"O Dia que Durou 21 Anos" (2012)</li>
-                            <li>"Cidadão Boilesen" (2009)</li>
-                            <li>"Cabra Marcado para Morrer" (1984)</li>
-                            <li>"Marighella" (2012)</li>
-                            <li>"Em Busca da Verdade" (2015)</li>
-                        </ul>
-                    </div>
-                    <div class="border p-4 rounded-lg hover:shadow-md transition-all">
-                        <h3 class="text-lg font-bold mb-2">Sites e Arquivos</h3>
-                        <ul class="list-disc pl-5 space-y-1 text-sm">
-                            <li>Memórias da Ditadura (memoriasdaditadura.org.br)</li>
-                            <li>Arquivo Nacional (arquivonacional.gov.br)</li>
-                            <li>Comissão Nacional da Verdade (cnv.gov.br)</li>
-                            <li>Memorial da Resistência de São Paulo</li>
-                            <li>Centro de Documentação Eremias Delizoicov</li>
                         </ul>
                     </div>
                 </div>
@@ -1473,47 +1247,6 @@
                 });
             });
             
-            // Quiz
-            const checkAnswersButton = document.getElementById('check-answers');
-            const quizResult = document.getElementById('quiz-result');
-            const quizScore = document.getElementById('quiz-score');
-            
-            checkAnswersButton.addEventListener('click', function() {
-                let score = 0;
-                const questions = document.querySelectorAll('.quiz-question');
-                
-                questions.forEach((question, index) => {
-                    const options = question.querySelectorAll('.quiz-option');
-                    let answered = false;
-                    
-                    options.forEach(option => {
-                        const radio = option.querySelector('input[type="radio"]');
-                        const isCorrect = option.getAttribute('data-correct') === 'true';
-                        
-                        if (radio.checked) {
-                            answered = true;
-                            if (isCorrect) {
-                                score++;
-                                option.classList.add('correct');
-                            } else {
-                                option.classList.add('incorrect');
-                            }
-                        } else if (isCorrect) {
-                            option.classList.add('correct');
-                        }
-                        
-                        // Desabilita os inputs após verificação
-                        radio.disabled = true;
-                    });
-                });
-                
-                quizScore.textContent = `Você acertou ${score} de 5 questões!`;
-                quizResult.classList.remove('hidden');
-                
-                // Desabilita o botão após verificação
-                this.disabled = true;
-            });
-            
             // Gráfico de crescimento econômico
             const chartContainer = document.getElementById('economic-chart');
             const data = [
@@ -1563,5 +1296,5 @@
             });
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'968843bc236c2d34',t:'MTc1NDA4MjAyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96885e9171aff1bb',t:'MTc1NDA4MzEyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
